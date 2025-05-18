@@ -8,27 +8,20 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as NotFoundImport } from './routes/not-found'
 import { Route as IndexImport } from './routes/index'
-import { Route as ArticlesIndexImport } from './routes/articles/index'
-import { Route as ArticleslayoutImport } from './routes/articles/__layout'
-
-// Create Virtual Routes
-
-const ArticlesImport = createFileRoute('/articles')()
+import { Route as AuthAuthLayoutImport } from './routes/_auth/_auth-layout'
+import { Route as ArticlesArticlesLayoutImport } from './routes/_articles/_articles-layout'
+import { Route as AuthAuthLayoutRegisterImport } from './routes/_auth/_auth-layout/register'
+import { Route as AuthAuthLayoutLoginImport } from './routes/_auth/_auth-layout/login'
+import { Route as ArticlesArticlesLayoutArticlesIndexImport } from './routes/_articles/_articles-layout/articles/index'
+import { Route as ArticlesArticlesLayoutArticlesCreateImport } from './routes/_articles/_articles-layout/articles/create'
+import { Route as ArticlesArticlesLayoutArticlesEditSlugImport } from './routes/_articles/_articles-layout/articles/edit/$slug'
 
 // Create/Update Routes
-
-const ArticlesRoute = ArticlesImport.update({
-  id: '/articles',
-  path: '/articles',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const NotFoundRoute = NotFoundImport.update({
   id: '/not-found',
@@ -42,16 +35,48 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ArticlesIndexRoute = ArticlesIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ArticlesRoute,
+const AuthAuthLayoutRoute = AuthAuthLayoutImport.update({
+  id: '/_auth/_auth-layout',
+  getParentRoute: () => rootRoute,
 } as any)
 
-const ArticleslayoutRoute = ArticleslayoutImport.update({
-  id: '/__layout',
-  getParentRoute: () => ArticlesRoute,
+const ArticlesArticlesLayoutRoute = ArticlesArticlesLayoutImport.update({
+  id: '/_articles/_articles-layout',
+  getParentRoute: () => rootRoute,
 } as any)
+
+const AuthAuthLayoutRegisterRoute = AuthAuthLayoutRegisterImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => AuthAuthLayoutRoute,
+} as any)
+
+const AuthAuthLayoutLoginRoute = AuthAuthLayoutLoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthAuthLayoutRoute,
+} as any)
+
+const ArticlesArticlesLayoutArticlesIndexRoute =
+  ArticlesArticlesLayoutArticlesIndexImport.update({
+    id: '/articles/',
+    path: '/articles/',
+    getParentRoute: () => ArticlesArticlesLayoutRoute,
+  } as any)
+
+const ArticlesArticlesLayoutArticlesCreateRoute =
+  ArticlesArticlesLayoutArticlesCreateImport.update({
+    id: '/articles/create',
+    path: '/articles/create',
+    getParentRoute: () => ArticlesArticlesLayoutRoute,
+  } as any)
+
+const ArticlesArticlesLayoutArticlesEditSlugRoute =
+  ArticlesArticlesLayoutArticlesEditSlugImport.update({
+    id: '/articles/edit/$slug',
+    path: '/articles/edit/$slug',
+    getParentRoute: () => ArticlesArticlesLayoutRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -71,93 +96,177 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotFoundImport
       parentRoute: typeof rootRoute
     }
-    '/articles': {
-      id: '/articles'
-      path: '/articles'
-      fullPath: '/articles'
-      preLoaderRoute: typeof ArticlesImport
+    '/_articles/_articles-layout': {
+      id: '/_articles/_articles-layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ArticlesArticlesLayoutImport
       parentRoute: typeof rootRoute
     }
-    '/articles/__layout': {
-      id: '/articles/__layout'
+    '/_auth/_auth-layout': {
+      id: '/_auth/_auth-layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthAuthLayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/_auth/_auth-layout/login': {
+      id: '/_auth/_auth-layout/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthAuthLayoutLoginImport
+      parentRoute: typeof AuthAuthLayoutImport
+    }
+    '/_auth/_auth-layout/register': {
+      id: '/_auth/_auth-layout/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof AuthAuthLayoutRegisterImport
+      parentRoute: typeof AuthAuthLayoutImport
+    }
+    '/_articles/_articles-layout/articles/create': {
+      id: '/_articles/_articles-layout/articles/create'
+      path: '/articles/create'
+      fullPath: '/articles/create'
+      preLoaderRoute: typeof ArticlesArticlesLayoutArticlesCreateImport
+      parentRoute: typeof ArticlesArticlesLayoutImport
+    }
+    '/_articles/_articles-layout/articles/': {
+      id: '/_articles/_articles-layout/articles/'
       path: '/articles'
       fullPath: '/articles'
-      preLoaderRoute: typeof ArticleslayoutImport
-      parentRoute: typeof ArticlesRoute
+      preLoaderRoute: typeof ArticlesArticlesLayoutArticlesIndexImport
+      parentRoute: typeof ArticlesArticlesLayoutImport
     }
-    '/articles/': {
-      id: '/articles/'
-      path: '/'
-      fullPath: '/articles/'
-      preLoaderRoute: typeof ArticlesIndexImport
-      parentRoute: typeof ArticlesImport
+    '/_articles/_articles-layout/articles/edit/$slug': {
+      id: '/_articles/_articles-layout/articles/edit/$slug'
+      path: '/articles/edit/$slug'
+      fullPath: '/articles/edit/$slug'
+      preLoaderRoute: typeof ArticlesArticlesLayoutArticlesEditSlugImport
+      parentRoute: typeof ArticlesArticlesLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface ArticlesRouteChildren {
-  ArticleslayoutRoute: typeof ArticleslayoutRoute
-  ArticlesIndexRoute: typeof ArticlesIndexRoute
+interface ArticlesArticlesLayoutRouteChildren {
+  ArticlesArticlesLayoutArticlesCreateRoute: typeof ArticlesArticlesLayoutArticlesCreateRoute
+  ArticlesArticlesLayoutArticlesIndexRoute: typeof ArticlesArticlesLayoutArticlesIndexRoute
+  ArticlesArticlesLayoutArticlesEditSlugRoute: typeof ArticlesArticlesLayoutArticlesEditSlugRoute
 }
 
-const ArticlesRouteChildren: ArticlesRouteChildren = {
-  ArticleslayoutRoute: ArticleslayoutRoute,
-  ArticlesIndexRoute: ArticlesIndexRoute,
+const ArticlesArticlesLayoutRouteChildren: ArticlesArticlesLayoutRouteChildren =
+  {
+    ArticlesArticlesLayoutArticlesCreateRoute:
+      ArticlesArticlesLayoutArticlesCreateRoute,
+    ArticlesArticlesLayoutArticlesIndexRoute:
+      ArticlesArticlesLayoutArticlesIndexRoute,
+    ArticlesArticlesLayoutArticlesEditSlugRoute:
+      ArticlesArticlesLayoutArticlesEditSlugRoute,
+  }
+
+const ArticlesArticlesLayoutRouteWithChildren =
+  ArticlesArticlesLayoutRoute._addFileChildren(
+    ArticlesArticlesLayoutRouteChildren,
+  )
+
+interface AuthAuthLayoutRouteChildren {
+  AuthAuthLayoutLoginRoute: typeof AuthAuthLayoutLoginRoute
+  AuthAuthLayoutRegisterRoute: typeof AuthAuthLayoutRegisterRoute
 }
 
-const ArticlesRouteWithChildren = ArticlesRoute._addFileChildren(
-  ArticlesRouteChildren,
+const AuthAuthLayoutRouteChildren: AuthAuthLayoutRouteChildren = {
+  AuthAuthLayoutLoginRoute: AuthAuthLayoutLoginRoute,
+  AuthAuthLayoutRegisterRoute: AuthAuthLayoutRegisterRoute,
+}
+
+const AuthAuthLayoutRouteWithChildren = AuthAuthLayoutRoute._addFileChildren(
+  AuthAuthLayoutRouteChildren,
 )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/not-found': typeof NotFoundRoute
-  '/articles': typeof ArticleslayoutRoute
-  '/articles/': typeof ArticlesIndexRoute
+  '': typeof AuthAuthLayoutRouteWithChildren
+  '/login': typeof AuthAuthLayoutLoginRoute
+  '/register': typeof AuthAuthLayoutRegisterRoute
+  '/articles/create': typeof ArticlesArticlesLayoutArticlesCreateRoute
+  '/articles': typeof ArticlesArticlesLayoutArticlesIndexRoute
+  '/articles/edit/$slug': typeof ArticlesArticlesLayoutArticlesEditSlugRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/not-found': typeof NotFoundRoute
-  '/articles': typeof ArticlesIndexRoute
+  '': typeof AuthAuthLayoutRouteWithChildren
+  '/login': typeof AuthAuthLayoutLoginRoute
+  '/register': typeof AuthAuthLayoutRegisterRoute
+  '/articles/create': typeof ArticlesArticlesLayoutArticlesCreateRoute
+  '/articles': typeof ArticlesArticlesLayoutArticlesIndexRoute
+  '/articles/edit/$slug': typeof ArticlesArticlesLayoutArticlesEditSlugRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/not-found': typeof NotFoundRoute
-  '/articles': typeof ArticlesRouteWithChildren
-  '/articles/__layout': typeof ArticleslayoutRoute
-  '/articles/': typeof ArticlesIndexRoute
+  '/_articles/_articles-layout': typeof ArticlesArticlesLayoutRouteWithChildren
+  '/_auth/_auth-layout': typeof AuthAuthLayoutRouteWithChildren
+  '/_auth/_auth-layout/login': typeof AuthAuthLayoutLoginRoute
+  '/_auth/_auth-layout/register': typeof AuthAuthLayoutRegisterRoute
+  '/_articles/_articles-layout/articles/create': typeof ArticlesArticlesLayoutArticlesCreateRoute
+  '/_articles/_articles-layout/articles/': typeof ArticlesArticlesLayoutArticlesIndexRoute
+  '/_articles/_articles-layout/articles/edit/$slug': typeof ArticlesArticlesLayoutArticlesEditSlugRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/not-found' | '/articles' | '/articles/'
+  fullPaths:
+    | '/'
+    | '/not-found'
+    | ''
+    | '/login'
+    | '/register'
+    | '/articles/create'
+    | '/articles'
+    | '/articles/edit/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/not-found' | '/articles'
+  to:
+    | '/'
+    | '/not-found'
+    | ''
+    | '/login'
+    | '/register'
+    | '/articles/create'
+    | '/articles'
+    | '/articles/edit/$slug'
   id:
     | '__root__'
     | '/'
     | '/not-found'
-    | '/articles'
-    | '/articles/__layout'
-    | '/articles/'
+    | '/_articles/_articles-layout'
+    | '/_auth/_auth-layout'
+    | '/_auth/_auth-layout/login'
+    | '/_auth/_auth-layout/register'
+    | '/_articles/_articles-layout/articles/create'
+    | '/_articles/_articles-layout/articles/'
+    | '/_articles/_articles-layout/articles/edit/$slug'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   NotFoundRoute: typeof NotFoundRoute
-  ArticlesRoute: typeof ArticlesRouteWithChildren
+  ArticlesArticlesLayoutRoute: typeof ArticlesArticlesLayoutRouteWithChildren
+  AuthAuthLayoutRoute: typeof AuthAuthLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   NotFoundRoute: NotFoundRoute,
-  ArticlesRoute: ArticlesRouteWithChildren,
+  ArticlesArticlesLayoutRoute: ArticlesArticlesLayoutRouteWithChildren,
+  AuthAuthLayoutRoute: AuthAuthLayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -172,7 +281,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/not-found",
-        "/articles"
+        "/_articles/_articles-layout",
+        "/_auth/_auth-layout"
       ]
     },
     "/": {
@@ -181,20 +291,40 @@ export const routeTree = rootRoute
     "/not-found": {
       "filePath": "not-found.tsx"
     },
-    "/articles": {
-      "filePath": "articles",
+    "/_articles/_articles-layout": {
+      "filePath": "_articles/_articles-layout.tsx",
       "children": [
-        "/articles/__layout",
-        "/articles/"
+        "/_articles/_articles-layout/articles/create",
+        "/_articles/_articles-layout/articles/",
+        "/_articles/_articles-layout/articles/edit/$slug"
       ]
     },
-    "/articles/__layout": {
-      "filePath": "articles/__layout.tsx",
-      "parent": "/articles"
+    "/_auth/_auth-layout": {
+      "filePath": "_auth/_auth-layout.tsx",
+      "children": [
+        "/_auth/_auth-layout/login",
+        "/_auth/_auth-layout/register"
+      ]
     },
-    "/articles/": {
-      "filePath": "articles/index.tsx",
-      "parent": "/articles"
+    "/_auth/_auth-layout/login": {
+      "filePath": "_auth/_auth-layout/login.tsx",
+      "parent": "/_auth/_auth-layout"
+    },
+    "/_auth/_auth-layout/register": {
+      "filePath": "_auth/_auth-layout/register.tsx",
+      "parent": "/_auth/_auth-layout"
+    },
+    "/_articles/_articles-layout/articles/create": {
+      "filePath": "_articles/_articles-layout/articles/create.tsx",
+      "parent": "/_articles/_articles-layout"
+    },
+    "/_articles/_articles-layout/articles/": {
+      "filePath": "_articles/_articles-layout/articles/index.tsx",
+      "parent": "/_articles/_articles-layout"
+    },
+    "/_articles/_articles-layout/articles/edit/$slug": {
+      "filePath": "_articles/_articles-layout/articles/edit/$slug.tsx",
+      "parent": "/_articles/_articles-layout"
     }
   }
 }
